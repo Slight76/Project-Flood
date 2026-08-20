@@ -1,0 +1,37 @@
+name: Validate Copilot Configuration
+
+on:
+  pull_request:
+    paths:
+      - "AGENTS.md"
+      - ".github/agents/**"
+      - ".github/instructions/**"
+      - ".github/skills/**"
+      - ".github/prompts/**"
+      - ".github/copilot-instructions.md"
+      - ".agent-team/**"
+      - ".project-flood/**"
+  push:
+    paths:
+      - "AGENTS.md"
+      - ".github/agents/**"
+      - ".github/instructions/**"
+      - ".github/skills/**"
+      - ".github/prompts/**"
+      - ".github/copilot-instructions.md"
+      - ".agent-team/**"
+      - ".project-flood/**"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate Project Flood configuration
+        run: python .project-flood/validate_config.py --root .
