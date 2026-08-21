@@ -521,7 +521,7 @@ def pre_tool_use(payload: dict[str, Any], root: Path) -> dict[str, Any]:
         working_directory = root
         try:
             candidate_cwd = Path(str(payload.get("cwd", root))).resolve()
-            candidate_cwd.relative_to(root)
+            candidate_cwd.relative_to(root.resolve())
             working_directory = candidate_cwd
         except (OSError, ValueError):
             pass

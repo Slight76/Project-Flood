@@ -42,12 +42,23 @@ if [[ -z "${target_root}" || ( "${mode}" != "full" && "${mode}" != "adapter" ) ]
   exit 2
 fi
 
+to_bash_path() {
+  if command -v cygpath >/dev/null 2>&1; then
+    cygpath -u "$1"
+  else
+    printf '%s\n' "$1"
+  fi
+}
+
+script_path="$(to_bash_path "${BASH_SOURCE[0]}")"
+target_root="$(to_bash_path "${target_root}")"
+
 if [[ ! -d "${target_root}" ]]; then
   echo "Target directory does not exist: ${target_root}" >&2
   exit 1
 fi
 
-script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+script_dir="$(cd "$(dirname "${script_path}")" && pwd)"
 source_root="$(cd "${script_dir}/../template" && pwd)"
 target_root="$(cd "${target_root}" && pwd)"
 

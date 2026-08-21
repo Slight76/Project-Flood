@@ -175,6 +175,21 @@ class HookPolicyTests(unittest.TestCase):
             result = hook.pre_tool_use(payload, root)
             self.assertEqual({"continue": True}, result)
 
+    def test_relative_edit_path_uses_resolved_root_alias(self):
+        with tempfile.TemporaryDirectory() as temp_dir:
+            real_root = Path(temp_dir) / "real"
+            alias_root = Path(temp_dir) / "alias"
+            (real_root / "src").mkdir(parents=True)
+            try:
+                alias_root.symlink_to(real_root, target_is_directory=True)
+            except (OSError, NotImplementedError):
+                self.skipTest("directory symlinks are unavailable")
+            self.write_manifest(real_root)
+            payload = self.payload(path="owned/file.py")
+            payload["cwd"] = str(alias_root / "src")
+            result = hook.pre_tool_use(payload, alias_root)
+            self.assertEqual({"continue": True}, result)
+
     def test_hook_reads_git_common_directory_lease(self):
         with tempfile.TemporaryDirectory() as temp_dir:
             root = Path(temp_dir)
