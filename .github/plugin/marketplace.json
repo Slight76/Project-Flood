@@ -1,0 +1,19 @@
+{
+  "name": "project-flood",
+  "owner": {
+    "name": "Slight76"
+  },
+  "metadata": {
+    "description": "Governed squad and bounded swarm capabilities for GitHub Copilot.",
+    "version": "0.2.0"
+  },
+  "plugins": [
+    {
+      "name": "project-flood",
+      "description": "A governed Copilot squad that can create bounded research and worktree swarms.",
+      "version": "0.2.0",
+      "source": ".",
+      "strict": true
+    }
+  ]
+}

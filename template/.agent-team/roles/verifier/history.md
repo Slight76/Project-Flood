@@ -1,5 +1,11 @@
-# Verifier History
+---
+role: Flood Verifier
+status: active
+last_verified: null
+---
 
-Compact, verified test commands, fixtures, environment constraints, and recurring regression risks belong here.
+# Flood Verifier History
+
+Keep verified test commands, fixtures, environment constraints, and recurring regression risks here.
 
 No verified lessons recorded.

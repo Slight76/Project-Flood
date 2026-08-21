@@ -1,23 +1,7 @@
-# Active Decisions
+# Legacy v0.1 Decision Rollup
 
-Only Librarian writes this file. Keep active, repository-wide decisions concise. Move superseded entries to `.agent-team/archive/` and retain their identifiers.
+Project Flood v0.2 stores each new durable decision as an individual canonical Markdown record under `.agent-team/memory/decisions/`, with YAML frontmatter and a generated index.
 
-No repository-specific decisions have been verified yet.
+Do not add new entries here. Existing repository-specific v0.1 decisions remain readable and should be migrated individually by Flood Librarian after evidence and conflict review. Never delete this file during migration until every retained entry has a canonical record or an explicit discard outcome.
 
-## Decision format
-
-```markdown
-### D-YYYY-NNN — Short title
-
-- **Status:** Active | Superseded | Experimental
-- **Scope:** Paths, components, or workflows affected
-- **Owner:** Human decision owner
-- **Recorded by:** Librarian
-- **Verified:** YYYY-MM-DD
-- **Review when:** Expiration date or triggering condition
-- **Evidence:** PR, commit, test, file, policy, or explicit user directive
-- **Decision:** What future agents must follow
-- **Rationale:** Why this choice was made
-- **Alternatives:** Important rejected options
-- **Supersedes:** Prior decision identifier, if any
-```
+No repository-specific v0.1 decisions are present in this template.

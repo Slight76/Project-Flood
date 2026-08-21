@@ -1,0 +1,13 @@
+{
+  "extraKnownMarketplaces": {
+    "project-flood": {
+      "source": {
+        "source": "github",
+        "repo": "Slight76/Project-Flood"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "project-flood@project-flood": true
+  }
+}

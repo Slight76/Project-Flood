@@ -1,24 +1,30 @@
-name: Validate Copilot Configuration
+name: Validate Project Flood Configuration
 
 on:
   pull_request:
     paths:
       - "AGENTS.md"
       - ".github/agents/**"
+      - ".github/hooks/**"
       - ".github/instructions/**"
       - ".github/skills/**"
       - ".github/prompts/**"
       - ".github/copilot-instructions.md"
+      - ".github/workflows/copilot-config-validation.yml"
+      - ".github/workflows/copilot-setup-steps.yml"
       - ".agent-team/**"
       - ".project-flood/**"
   push:
     paths:
       - "AGENTS.md"
       - ".github/agents/**"
+      - ".github/hooks/**"
       - ".github/instructions/**"
       - ".github/skills/**"
       - ".github/prompts/**"
       - ".github/copilot-instructions.md"
+      - ".github/workflows/copilot-config-validation.yml"
+      - ".github/workflows/copilot-setup-steps.yml"
       - ".agent-team/**"
       - ".project-flood/**"
 
@@ -27,11 +33,25 @@ permissions:
 
 jobs:
   validate:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
         with:
           python-version: "3.12"
-      - name: Validate Project Flood configuration
-        run: python .project-flood/validate_config.py --root .
+          cache: pip
+          cache-dependency-path: .project-flood/requirements.txt
+      - name: Install validator dependency
+        run: python -m pip install --requirement .project-flood/requirements.txt
+      - name: Validate configuration
+        run: python .project-flood/flood.py validate --root .
+      - name: Diagnose managed-file drift
+        run: python .project-flood/flood.py doctor --root .

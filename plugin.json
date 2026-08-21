@@ -1,0 +1,13 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "project-flood",
+  "description": "A governed Copilot squad that can create bounded research and worktree swarms.",
+  "version": "0.2.0",
+  "author": {
+    "name": "Slight76",
+    "url": "https://github.com/Slight76"
+  },
+  "homepage": "https://github.com/Slight76/Project-Flood",
+  "repository": "https://github.com/Slight76/Project-Flood",
+  "keywords": ["copilot", "agents", "squad", "swarm", "governance", "memory"]
+}

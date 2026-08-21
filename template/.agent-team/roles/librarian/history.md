@@ -1,5 +1,11 @@
-# Librarian History
+---
+role: Flood Librarian
+status: active
+last_verified: null
+---
 
-Compact lessons about this repository's memory quality, stale-context triggers, and successful skill reuse belong here.
+# Flood Librarian History
+
+Keep lessons about memory quality, revalidation triggers, compaction, and successful skill reuse here.
 
 No verified lessons recorded.

@@ -6,12 +6,12 @@
 
 ## In progress
 
-- Inspect the repository and establish a verified project profile.
+- Verify the repository profile, routes, harnesses, policy, and developer commands.
 
 ## Blockers
 
-- Technology, commands, architecture, and path ownership have not been verified.
+- Technology, architecture, path ownership, external-tool allowlists, and project setup steps are not verified.
 
 ## Next checkpoint
 
-- Human reviews onboarding output before implementation swarms are enabled.
+- Human approves onboarding output before behavior-changing implementation or build swarms.

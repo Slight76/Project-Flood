@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "TASK-EXAMPLE",
+  "coordinator_session_key": "populate-from-session-start-context",
+  "status": "planned",
+  "mode": "build-swarm",
+  "base_commit": "0123456789abcdef",
+  "expires_at": "2099-01-01T00:00:00Z",
+  "workers": [
+    {
+      "id": "backend",
+      "role": "Flood Builder",
+      "status": "planned",
+      "wave": 1,
+      "session_key": "populate-from-worker-session-start-context",
+      "branch": "flood/task-example-backend",
+      "worktree": "managed-by-agent-host",
+      "depends_on": [],
+      "write_paths": ["src/Api/**", "tests/Api/**"],
+      "acceptance_criteria": ["Backend contract tests pass"]
+    }
+  ]
+}

@@ -2,71 +2,96 @@
 set -euo pipefail
 
 usage() {
-  echo "Usage: $0 [--force] <target-repository>"
+  echo "Usage: $0 [--force] [--mode full|adapter] <target-repository>"
 }
 
 force=false
-if [[ "${1:-}" == "--force" ]]; then
-  force=true
-  shift
-fi
+mode="full"
+target_root=""
 
-if [[ $# -ne 1 ]]; then
-  usage
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --force)
+      force=true
+      shift
+      ;;
+    --mode)
+      [[ $# -ge 2 ]] || { usage >&2; exit 2; }
+      mode="$2"
+      shift 2
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    -* )
+      echo "Unknown option: $1" >&2
+      usage >&2
+      exit 2
+      ;;
+    *)
+      [[ -z "${target_root}" ]] || { usage >&2; exit 2; }
+      target_root="$1"
+      shift
+      ;;
+  esac
+done
+
+if [[ -z "${target_root}" || ( "${mode}" != "full" && "${mode}" != "adapter" ) ]]; then
+  usage >&2
   exit 2
 fi
 
-script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source_root="$(cd "${script_dir}/../template" && pwd)"
-target_root="$1"
+to_bash_path() {
+  if command -v cygpath >/dev/null 2>&1; then
+    cygpath -u "$1"
+  else
+    printf '%s\n' "$1"
+  fi
+}
+
+script_path="$(to_bash_path "${BASH_SOURCE[0]}")"
+target_root="$(to_bash_path "${target_root}")"
 
 if [[ ! -d "${target_root}" ]]; then
   echo "Target directory does not exist: ${target_root}" >&2
   exit 1
 fi
 
+script_dir="$(cd "$(dirname "${script_path}")" && pwd)"
+source_root="$(cd "${script_dir}/../template" && pwd)"
 target_root="$(cd "${target_root}" && pwd)"
-conflicts=()
-shopt -s globstar dotglob nullglob
-source_files=("${source_root}"/**)
 
-for source_file in "${source_files[@]}"; do
-  [[ -f "${source_file}" ]] || continue
-  relative_path="${source_file#"${source_root}/"}"
-  destination="${target_root}/${relative_path}"
-  if [[ -e "${destination}" ]]; then
-    conflicts+=("${relative_path}")
+python_command=()
+for candidate in python3 python; do
+  if command -v "${candidate}" >/dev/null 2>&1 \
+    && "${candidate}" -c "import sys; raise SystemExit(0 if sys.version_info >= (3, 10) else 1)" \
+      >/dev/null 2>&1; then
+    python_command=("${candidate}")
+    break
   fi
 done
 
-if [[ ${#conflicts[@]} -gt 0 && "${force}" != true ]]; then
-  echo "No files were copied because these destinations already exist:" >&2
-  printf '  %s\n' "${conflicts[@]}" >&2
-  echo "Merge them manually, or rerun with --force to back them up and replace them." >&2
+if [[ ${#python_command[@]} -eq 0 ]]; then
+  echo "Project Flood requires Python 3.10 or newer." >&2
   exit 1
 fi
 
-backup_root=""
-if [[ ${#conflicts[@]} -gt 0 ]]; then
-  backup_root="${target_root}/.project-flood-backup/$(date -u +%Y%m%d-%H%M%S)"
-  for relative_path in "${conflicts[@]}"; do
-    mkdir -p "${backup_root}/$(dirname "${relative_path}")"
-    cp -p "${target_root}/${relative_path}" "${backup_root}/${relative_path}"
-  done
+if ! "${python_command[@]}" -c "import yaml" >/dev/null 2>&1; then
+  echo "PyYAML is required. Run: ${python_command[*]} -m pip install -r ${script_dir}/../requirements.txt" >&2
+  exit 1
 fi
 
-for source_file in "${source_files[@]}"; do
-  [[ -f "${source_file}" ]] || continue
-  relative_path="${source_file#"${source_root}/"}"
-  destination="${target_root}/${relative_path}"
-  mkdir -p "$(dirname "${destination}")"
-  cp -p "${source_file}" "${destination}"
-done
-
-mkdir -p "${target_root}/.agent-team/scratch"
-
-echo "Project Flood installed into ${target_root}"
-if [[ -n "${backup_root}" ]]; then
-  echo "Replaced files were backed up to ${backup_root}"
+arguments=(
+  "${script_dir}/flood.py"
+  install
+  --source "${source_root}"
+  --target "${target_root}"
+  --mode "${mode}"
+)
+if [[ "${force}" == true ]]; then
+  arguments+=(--force)
 fi
-echo "Next: open the repository in VS Code, select Squad Lead, and run /onboard-repository."
+
+"${python_command[@]}" "${arguments[@]}"
+echo "Next: open the repository in VS Code, select Flood Squad Lead, and invoke flood-repository-onboarding."
