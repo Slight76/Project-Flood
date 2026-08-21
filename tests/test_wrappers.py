@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import shutil
 import subprocess
 import tempfile
@@ -10,14 +11,30 @@ from pathlib import Path
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 
 
+def find_supported_bash() -> str | None:
+    if os.name != "nt":
+        return shutil.which("bash")
+    git = shutil.which("git")
+    if not git:
+        return None
+    git_root = Path(git).resolve().parents[1]
+    for candidate in (git_root / "bin/bash.exe", git_root / "usr/bin/bash.exe"):
+        if candidate.is_file():
+            return str(candidate)
+    return None
+
+
+BASH = find_supported_bash()
+
+
 class WrapperSmokeTests(unittest.TestCase):
-    @unittest.skipUnless(shutil.which("bash"), "bash is not available")
+    @unittest.skipUnless(BASH, "a supported Bash installation is not available")
     def test_bash_installer(self):
         with tempfile.TemporaryDirectory() as temp_dir:
             target = Path(temp_dir) / "bash-target"
             target.mkdir()
             completed = subprocess.run(
-                ["bash", str(REPOSITORY_ROOT / "scripts/install.sh"), str(target)],
+                [BASH, str(REPOSITORY_ROOT / "scripts/install.sh"), str(target)],
                 check=False,
                 cwd=REPOSITORY_ROOT,
                 capture_output=True,
