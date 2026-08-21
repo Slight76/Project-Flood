@@ -125,6 +125,10 @@ python scripts/flood.py upgrade --target /path/to/target-repository
 
 Conflicts stop without modifying files. `--force` backs up conflicting files under the gitignored `.project-flood/backups/` directory before replacement. Migration and uninstall are dry runs unless explicitly applied. See the [lifecycle guide](docs/upgrades.md).
 
+## License
+
+Project Flood is licensed under the [Apache License 2.0](LICENSE). Copyright 2026 Jackson Hopkins; attribution details are recorded in [NOTICE](NOTICE).
+
 ## Limits
 
 Hooks are preview defense-in-depth. They do not replace OS sandboxing, GitHub permissions, branch protection, required reviews, CI, or human approval. Tool and agent support varies by harness, and model behavior evaluations still need real harness runs. Project Flood bundles no MCP server and allowlists no external tool prefix by default.
