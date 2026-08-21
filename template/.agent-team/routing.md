@@ -1,32 +1,34 @@
 # Work Routing
 
-Routes are evaluated in this order: explicit named assignment, most-specific repository path/domain, applicable skill, then Squad Lead fallback. Update the repository-specific table during onboarding.
+Evaluate routes in this order: explicit qualified assignment, most-specific verified path/domain, applicable `flood-*` skill, then Flood Squad Lead fallback.
 
 ## Role routing
 
-| Work type | Route to | Examples |
+| Work | Primary | Required gate |
 | --- | --- | --- |
-| Repository discovery | Scout | Locate entry points, trace flows, find existing patterns |
-| Architecture | Architect | Boundaries, APIs, migrations, trade-offs |
-| Implementation | Builder | Product code, configuration, targeted tests |
-| Verification | Verifier | Test execution, regression analysis, acceptance review |
-| Security/privacy | Security Reviewer | Auth, credentials, permissions, input handling, dependencies |
-| Memory/knowledge | Librarian | Decisions, profile, role history, context maintenance |
-| Parallel decomposition | Swarm Analyst | Dependencies, ownership, concurrency, acceptance criteria |
-| Final synthesis or ambiguity | Squad Lead | User-facing answer, escalation, cross-domain decision |
+| Repository/primary-source discovery | Flood Scout | Evidence review |
+| Architecture, interfaces, migration | Flood Architect | Human decision when material |
+| Implementation | Flood Builder | Flood Verifier |
+| Worktree fan-in | Flood Integrator | Flood Verifier after integration |
+| Behavioral verification | Flood Verifier | Independent verdict |
+| Security/privacy/tools/supply chain | Flood Security Reviewer | Security verdict |
+| Memory and earned skills | Flood Librarian | Evidence/promotion gate |
+| Parallel decomposition | Flood Swarm Analyst | Lead accepts graph/ownership |
+| Ambiguity or synthesis | Flood Squad Lead | Human escalation as needed |
 
 ## Repository-specific routes
 
-| Path or domain | Primary | Required reviewer | Notes |
+| Path/domain | Primary | Required reviewer | Notes |
 | --- | --- | --- | --- |
-| Not yet mapped | Squad Lead | As risk requires | Populate during onboarding |
+| Not yet mapped | Flood Squad Lead | As risk requires | Populate during onboarding |
 
-## Routing rules
+## Rules
 
-1. Name-directed work routes to the named qualified role.
-2. The most specific verified path route wins.
-3. Security-sensitive changes always include Security Reviewer.
-4. Behavior-changing implementation always includes Verifier.
-5. Cross-cutting work starts with Architect or Swarm Analyst before Builder.
-6. If expertise is absent, report a skill gap; do not silently assign an unqualified agent.
-7. Log significant routing decisions and their rationale in `.agent-team/orchestration/` through Librarian.
+1. Most-specific verified route wins after an explicit named assignment.
+2. Behavior changes always include Flood Verifier.
+3. Security-sensitive work always includes Flood Security Reviewer.
+4. Cross-cutting work begins with Flood Architect or Flood Swarm Analyst.
+5. Parallel implementation uses separate worktree sessions and a validated runtime task manifest.
+6. Flood Integrator is not a general second Builder.
+7. Missing expertise or harness capability is reported, not silently approximated.
+8. Flood Librarian records significant routing rationale only after the result is accepted.

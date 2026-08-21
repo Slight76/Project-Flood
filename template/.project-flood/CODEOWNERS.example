@@ -1,0 +1,10 @@
+# Replace @YOUR-TEAM, then merge these entries into the target repository's CODEOWNERS file.
+/AGENTS.md @YOUR-TEAM
+/.github/agents/ @YOUR-TEAM
+/.github/hooks/ @YOUR-TEAM
+/.github/skills/ @YOUR-TEAM
+/.github/copilot/settings.json @YOUR-TEAM
+/.github/workflows/copilot-config-validation.yml @YOUR-TEAM
+/.github/workflows/copilot-setup-steps.yml @YOUR-TEAM
+/.project-flood/ @YOUR-TEAM
+/.agent-team/memory/ @YOUR-TEAM

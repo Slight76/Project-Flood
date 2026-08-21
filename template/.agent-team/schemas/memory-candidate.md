@@ -1,22 +1,32 @@
 # Memory Candidate
 
-Store temporary candidates under `.agent-team/decisions/inbox/` only when Squad Lead or Librarian requests a file. Otherwise return the same fields in the specialist handoff.
+Create a temporary file under `.agent-team/decisions/inbox/` only when Flood Squad Lead or Flood Librarian requests it. Otherwise return these fields in the handoff.
 
 ```markdown
-### MC-YYYYMMDD-NNN — Short title
+---
+id: MC-YYYYMMDD-NNN
+proposed_type: architecture | decision | convention | pitfall | profile | role-history | skill | current-focus | archive | discard
+proposed_destination: exact path or role
+scope: [affected/path/**]
+owner: accountable human or role
+observed: YYYY-MM-DD
+confidence: low | medium | high
+sources: [path/symbol, test, accepted change, policy, or explicit directive]
+review_when: date or triggering condition
+permissions:
+  write: accountable role or path
+  approve: human, accepted change, or verification gate
+tooling:
+  validation_command: command, if the claim depends on one
+---
 
-- **Proposed class:** Decision | Project profile | Role history | Skill | Current focus | Archive | Discard
-- **Proposed destination:** Exact file or role
-- **Scope:** Affected paths, components, or workflows
-- **Owner:** Human or accountable role
-- **Observed:** YYYY-MM-DD
-- **Confidence:** Low | Medium | High
-- **Evidence:** File/symbol, test output, merged PR/commit, policy, or explicit user directive
-- **Claim:** Concise durable information
-- **Why it matters later:** Future decision this changes
-- **Review when:** Date or triggering condition
-- **Conflicts checked:** Entries inspected and result
-- **Sensitive-data check:** Confirm no secret or personal data is included
+# Short claim
+
+## Claim and future consequence
+
+## Evidence and conflicts checked
+
+## Sensitive-data check
 ```
 
-Low-confidence candidates remain pending. Code-derived facts need source evidence. A repeatable skill requires at least one successful use and should not encode one-off project trivia.
+Low-confidence candidates remain pending. Rejected implementation claims, secrets, personal data, transient output, and cheaply rediscovered facts are discarded.

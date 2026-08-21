@@ -4,7 +4,7 @@
 **Last verified:** Never
 **Verified by:** —
 
-Squad Lead should run the `repository-onboarding` skill before implementation work. Librarian promotes the verified output into this file.
+Run the `flood-repository-onboarding` skill before implementation. Flood Librarian promotes approved evidence here.
 
 ## Purpose
 
@@ -27,9 +27,9 @@ Squad Lead should run the `repository-onboarding` skill before implementation wo
 
 ## Repository map
 
-| Path | Responsibility | Owner/routing note | Evidence |
+| Path | Responsibility | Route/owner | Evidence |
 | --- | --- | --- | --- |
-| — | Not yet mapped | — | — |
+| — | Not yet mapped | Flood Squad Lead | — |
 
 ## Verified commands
 
@@ -40,6 +40,15 @@ Squad Lead should run the `repository-onboarding` skill before implementation wo
 | Format/lint | Unknown | — | — |
 | Unit tests | Unknown | — | — |
 | Integration tests | Unknown | — | — |
+| Local run | Unknown | — | — |
+
+## Agent execution environment
+
+- Supported harnesses: Unknown; compare `.agent-team/harnesses.md` during onboarding.
+- Cloud-agent setup: Generic Project Flood setup only; project dependencies not onboarded.
+- Required Agent secrets/variables: Unknown; never store values here.
+- Network/firewall requirements: Unknown.
+- Worktree prerequisite/ignored files: Unknown.
 
 ## Architecture and constraints
 
@@ -51,4 +60,4 @@ Squad Lead should run the `repository-onboarding` skill before implementation wo
 
 ## Open questions
 
-- Complete repository onboarding.
+- Complete repository onboarding and policy review.

@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://project-flood.local/schemas/task-manifest.schema.json",
+  "title": "Project Flood Runtime Task Manifest",
+  "type": "object",
+  "required": ["schema_version", "task_id", "coordinator_session_key", "status", "mode", "base_commit", "expires_at", "workers"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "task_id": {"type": "string", "minLength": 1},
+    "coordinator_session_key": {"type": "string", "minLength": 1},
+    "status": {"enum": ["planned", "active", "paused", "complete", "cancelled"]},
+    "mode": {"enum": ["squad", "research-swarm", "build-swarm", "review-swarm"]},
+    "base_commit": {"type": "string", "pattern": "^[0-9a-fA-F]{7,64}$"},
+    "expires_at": {"type": "string", "format": "date-time"},
+    "workers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "role", "status", "wave", "session_key", "branch", "worktree", "depends_on", "write_paths", "acceptance_criteria"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "role": {"type": "string", "minLength": 1},
+          "status": {"enum": ["planned", "active", "complete", "failed", "cancelled"]},
+          "wave": {"type": "integer", "minimum": 1},
+          "session_key": {"type": "string"},
+          "branch": {"type": "string"},
+          "worktree": {"type": "string"},
+          "depends_on": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+          "write_paths": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Exact repository-relative path or prefix ending in /**"
+            },
+            "uniqueItems": true
+          },
+          "acceptance_criteria": {"type": "array", "items": {"type": "string", "minLength": 1}}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

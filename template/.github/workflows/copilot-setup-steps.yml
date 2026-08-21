@@ -1,0 +1,29 @@
+name: Copilot Setup Steps
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  copilot-setup-steps:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Set up Python for Project Flood
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: .project-flood/requirements.txt
+      - name: Install Project Flood validator dependency
+        run: python -m pip install --requirement .project-flood/requirements.txt
+      - name: Validate Project Flood
+        run: python .project-flood/flood.py validate --root .
+      # Onboarding should add deterministic project dependency restore/build steps here.
+      # Keep this job name unchanged so GitHub Copilot coding agent can discover it.

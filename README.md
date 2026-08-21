@@ -1,106 +1,139 @@
-# Project Flood
+# Project Flood v0.2
 
-Project Flood is a reusable, repository-native GitHub Copilot configuration for a stable specialist squad that can create temporary swarms when parallel work is justified.
+Project Flood is a governed GitHub Copilot squad that can fan out into temporary research, review, or worktree-isolated build swarms. v0.2 turns the v0.1 operating contract into a portable Agent Plugins 1.0 package plus a repository-owned adapter.
 
-It is intentionally smaller and more conservative than a fully autonomous agent framework:
+The design stays intentionally bounded:
 
-- one human-facing **Squad Lead** coordinates the work;
-- focused subagents research, design, implement, verify, review security, and maintain memory;
-- swarms are created only for independent tasks;
-- durable repository memory is evidence-gated and written by one Librarian;
-- research and review agents are read-only;
-- parallel editors must have exclusive path ownership or isolated Git worktrees;
-- external writes, commits, pushes, and pull requests still require human authorization.
+- one human-facing **Flood Squad Lead**;
+- eight hidden specialists, including a dedicated **Flood Integrator**;
+- maximum three active workers per wave;
+- read-only research, architecture, verification, security, and swarm planning;
+- separate worktree sessions and exclusive paths for parallel editors;
+- deterministic hooks for dangerous commands, protected paths, ownership, and external writes;
+- independent verification before completion and after fan-in;
+- one Librarian for evidence-gated durable memory.
 
-Project Flood does not train or modify an AI model. Its "learning" is curated Markdown state committed with the repository so that it stays visible, reviewable, and reversible.
+Project Flood does not train or modify a model. Its learning is reviewable repository context.
 
-## Install into a repository
+## Install
 
-Clone Project Flood next to the repository you want to configure, then run one of the installers.
+Project Flood requires Python 3.10+ and the pinned validator dependency:
 
-### PowerShell
+```bash
+python -m pip install --requirement requirements.txt
+```
+
+### Full repository install
+
+Use this first. It copies the plugin capabilities and repository adapter into the target:
+
+```bash
+./scripts/install.sh --mode full /path/to/target-repository
+```
 
 ```powershell
-git clone <PROJECT-FLOOD-REPOSITORY-URL>
-pwsh ./project-flood/scripts/install.ps1 -TargetPath C:\src\your-repository
+pwsh ./scripts/install.ps1 -Mode full -TargetPath C:\src\target-repository
 ```
 
-### Bash
+If the Project Flood plugin is already installed globally, disable it for a full-mode workspace; plugin and workspace hooks otherwise both run.
+
+### Plugin plus lightweight adapter
+
+In VS Code, enable `chat.plugins.enabled`, run **Chat: Install Plugin From Source**, and enter `https://github.com/Slight76/Project-Flood`. Then install only the target-specific adapter:
 
 ```bash
-git clone <PROJECT-FLOOD-REPOSITORY-URL>
-./project-flood/scripts/install.sh /path/to/your-repository
+./scripts/install.sh --mode adapter /path/to/target-repository
 ```
 
-The installers perform a full conflict preflight. By default, they make no changes if any destination file already exists. Pass `-Force` in PowerShell or `--force` in Bash to back up conflicting files under `.project-flood-backup/<timestamp>/` before replacing them.
+Adapter mode omits workspace copies of agents, skills, hooks, and hook code. The installed plugin supplies them; the repository keeps its contract, profile, routing, policy, setup workflow, canonical memory, runtime schema, and prompt wrappers.
 
-You can also copy the contents of [`template/`](template/) into a repository manually.
+Copilot CLI can install the same package directly with `copilot plugin install Slight76/Project-Flood`. For a cloud-agent adapter, review and merge `.project-flood/copilot-settings.adapter.example.json` into the target's existing `.github/copilot/settings.json`; do not overwrite existing settings.
 
-## Start using it in VS Code
+Private repositories are supported when the current Git credentials can clone them. Review the plugin before trusting it because plugins may execute hooks.
 
-1. Open the configured repository in a current VS Code release with GitHub Copilot enabled.
-2. Open Chat and run `/agents` or **Chat: Open Customizations**.
-3. Select **Squad Lead**.
-4. Run `/onboard-repository` before asking the squad to implement anything.
-5. Review the proposed repository profile, routes, and decisions.
-6. Try a bounded task such as:
+## Start
 
-   ```text
-   Investigate this repository's authentication flow. Use a read-only swarm if multiple independent areas need analysis. Return a diagram-free evidence summary and a recommended next step; do not edit code.
-   ```
+1. Open the configured target in a current VS Code release with Copilot enabled.
+2. Run **Chat: Open Customizations** and verify `Flood Squad Lead`, the `flood-*` skills, and hooks are discovered.
+3. Select **Flood Squad Lead**.
+4. Ask it to use `flood-repository-onboarding` before implementation.
+5. Review the proposed project profile, routing, harness capabilities, CODEOWNERS additions, and cloud-agent setup steps.
+6. Start with a bounded read-only task, then a small verified implementation.
 
-7. Then try an implementation task:
+Prompt files such as `flood-onboard` are local VS Code shortcuts. Skills are the portable workflow authority.
 
-   ```text
-   Add validation to the user-registration flow. Plan first, assign exclusive file ownership, implement the smallest change, run relevant tests, and have Verifier review it before declaring completion.
-   ```
+## What v0.2 adds
 
-## What gets installed
-
-| Path | Purpose |
+| Area | v0.2 behavior |
 | --- | --- |
-| `AGENTS.md` | Human-owned operating contract for every agent |
-| `.github/copilot-instructions.md` | Concise repository-wide development rules |
-| `.github/agents/` | Squad Lead and hidden specialist subagents |
-| `.github/instructions/` | File-scoped C#, TypeScript/React, SQL, test, CI/CD, and memory guidance |
-| `.github/skills/` | On-demand workflows for onboarding, swarming, verification, security, memory, and context hygiene |
-| `.github/prompts/` | Reusable entry prompts for onboarding, feature work, health checks, and reflection |
-| `.agent-team/` | Versioned routing, decisions, role histories, current focus, schemas, and audit summaries |
-| `.project-flood/` | Lightweight configuration validator |
+| Packaging | Agent Plugins 1.0 plus full or adapter repository installation |
+| Portability | Namespaced agents, portable tool aliases, skills replacing critical prompts, harness matrix |
+| Enforcement | Workspace/plugin hooks with deny/ask/allow decisions and metadata-only audit |
+| Build swarms | Validated task manifest, worktree sessions, wave/dependency/path rules, Integrator fan-in |
+| Memory | Canonical Markdown body + YAML frontmatter; generated YAML index; ephemeral runtime JSON |
+| Setup | Cloud-agent setup workflow and CODEOWNERS guidance |
+| Lifecycle | Baseline-hash manifest, `diff`, `doctor`, `upgrade`, v0.1 `migrate`, recoverable `uninstall` |
+| Quality | Real YAML parsing, Windows/Linux CI, pinned actions, threat model, adversarial eval corpus |
 
-## Operating model
+See [architecture](docs/architecture.md), [harness support](docs/harness-support.md), [threat model](docs/threat-model.md), [upgrades](docs/upgrades.md), and [behavioral evaluations](docs/evaluations.md).
 
-The lead chooses one of three modes:
+Release details are recorded in the [changelog](CHANGELOG.md).
 
-- **Direct:** answer a small factual question from already verified context.
-- **Squad:** route a normal task to the smallest qualified set of specialists.
-- **Swarm:** fan out two or more independent investigations, reviews, or isolated implementations, then fan results back into the lead.
+## Hybrid memory
 
-A swarm is not a license to parallelize everything. Dependent work stays sequential. The initial concurrency ceiling is three workers, and only one worker may own a given path at a time.
+Durable knowledge lives in individual Markdown records under `.agent-team/memory/`:
 
-## Validate the configuration
+- the body holds decisions, reasoning, evidence, exceptions, examples, and consequences;
+- YAML frontmatter holds identity, type, lifecycle, owner, confidence, dates, scope, tags, sources, and optional permission/tool metadata;
+- `memory-index.yaml` is generated and contains no unique knowledge;
+- task authoring and hook audit data are gitignored JSON under `.agent-team/runtime/`, while activated worktree leases are shared transiently through Git's common directory;
+- only Flood Librarian promotes or supersedes canonical memory after evidence review.
 
-From the Project Flood repository:
+Current code and enforced policy outrank memory. Rejected work never becomes active knowledge.
+
+## Validate and maintain
 
 ```bash
-python template/.project-flood/validate_config.py --root template
+python scripts/sync_distribution.py --check
+python scripts/flood.py validate --root . --distribution
 python -m unittest discover -s tests -v
 ```
 
-From an installed target repository:
+From an installed repository:
 
 ```bash
-python .project-flood/validate_config.py --root .
+python .project-flood/flood.py validate --root .
+python .project-flood/flood.py doctor --root .
+python .project-flood/flood.py memory-index --root . --check
 ```
 
-The installed GitHub Actions workflow runs the same validation on pull requests and pushes that modify Copilot configuration.
+For an approved build swarm, validate and publish the shared worktree lease, then close it after verified fan-in:
 
-## Customize after onboarding
+```bash
+python .project-flood/flood.py task-validate --root .
+python .project-flood/flood.py task-activate --root .
+python .project-flood/flood.py task-status --root .
+python .project-flood/flood.py task-close --root . --status complete
+```
 
-The initial language instructions support the stack this project was designed around: C#, TypeScript/React, SQL, tests, and GitHub/Azure-style CI/CD. Delete instruction files that do not apply. Keep each rule in one authoritative location; VS Code can combine multiple instruction files without guaranteeing their order.
+Preview changes before upgrading:
 
-Do not treat `.agent-team/project-profile.md` as a substitute for the codebase. It should be a compact index of verified commands, boundaries, and conventions with source references.
+```bash
+python scripts/flood.py diff --target /path/to/target-repository
+python scripts/flood.py upgrade --target /path/to/target-repository
+```
 
-## Updating
+Conflicts stop without modifying files. `--force` backs up conflicting files under the gitignored `.project-flood/backups/` directory before replacement. Migration and uninstall are dry runs unless explicitly applied. See the [lifecycle guide](docs/upgrades.md).
 
-Pull the latest Project Flood changes and run the installer again. The safe default reports conflicts without changing the target. Review differences before using the force option, which creates a timestamped backup.
+## Limits
+
+Hooks are preview defense-in-depth. They do not replace OS sandboxing, GitHub permissions, branch protection, required reviews, CI, or human approval. Tool and agent support varies by harness, and model behavior evaluations still need real harness runs. Project Flood bundles no MCP server and allowlists no external tool prefix by default.
+
+## Platform references
+
+- [Agent plugins](https://code.visualstudio.com/docs/agent-customization/agent-plugins)
+- [Agent hooks](https://code.visualstudio.com/docs/agent-customization/hooks)
+- [Agent harnesses and worktree sessions](https://code.visualstudio.com/docs/agents/run/agent-harnesses)
+- [Agent skills](https://code.visualstudio.com/docs/agent-customization/agent-skills)
+- [GitHub Copilot plugins](https://docs.github.com/en/copilot/concepts/agents/about-plugins)
+- [Cloud-agent repository setup](https://docs.github.com/en/copilot/tutorials/cloud-agent/improve-a-project)

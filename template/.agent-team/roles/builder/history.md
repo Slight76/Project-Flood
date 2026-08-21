@@ -1,5 +1,11 @@
-# Builder History
+---
+role: Flood Builder
+status: active
+last_verified: null
+---
 
-Compact, verified implementation patterns and recurring repository-specific pitfalls belong here. Do not store unmerged implementation claims.
+# Flood Builder History
+
+Keep verified implementation patterns and recurring repository-specific pitfalls here. Never store unaccepted implementation claims.
 
 No verified lessons recorded.

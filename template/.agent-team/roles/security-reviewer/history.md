@@ -1,5 +1,11 @@
-# Security Reviewer History
+---
+role: Flood Security Reviewer
+status: active
+last_verified: null
+---
 
-Compact, verified trust boundaries, sensitive-data classes, security controls, and recurring risks belong here. Never store secrets or exploitable production values.
+# Flood Security Reviewer History
+
+Keep verified trust boundaries, data classes, controls, and recurring risks here. Never store secrets or exploitable production values.
 
 No verified lessons recorded.

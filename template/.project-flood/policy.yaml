@@ -1,0 +1,77 @@
+schema_version: 1
+controls:
+  dangerous_commands: deny
+  protected_paths: ask
+  ownership_violations: deny
+  external_writes: ask
+  outside_workspace_writes: ask
+  unverifiable_writes: ask
+  unlisted_external_tools: ask
+  shared_task_state: deny
+protected_paths:
+  - AGENTS.md
+  - .github/CODEOWNERS
+  - .github/copilot-instructions.md
+  - .github/copilot/settings.json
+  - .github/instructions/**
+  - .github/hooks/**
+  - .github/agents/**
+  - .github/prompts/**
+  - .github/skills/**
+  - .github/workflows/copilot-config-validation.yml
+  - .github/workflows/copilot-setup-steps.yml
+  - .agent-team/README.md
+  - .agent-team/.gitignore
+  - .agent-team/charter.md
+  - .agent-team/project-profile.md
+  - .agent-team/routing.md
+  - .agent-team/now.md
+  - .agent-team/harnesses.md
+  - .agent-team/decisions.md
+  - .agent-team/archive/**
+  - .agent-team/memory/**
+  - .agent-team/orchestration/**
+  - .agent-team/roles/**
+  - .agent-team/schemas/**
+  - .project-flood/**
+external_write_tools:
+  - push
+  - commitfiles
+  - createpullrequest
+  - mergepullrequest
+  - createfile
+  - updatefile
+  - deletefile
+  - createissue
+  - updateissue
+  - createcomment
+  - addcomment
+  - deploy
+  - publish
+  - upload
+  - sendmessage
+built_in_tool_prefixes:
+  - agent
+  - edit
+  - execute
+  - read
+  - search
+  - todo
+  - vscode
+  - web
+allowed_external_tool_prefixes: []
+dangerous_commands:
+  - id: recursive-force-delete
+    pattern: '(?:^|\s)(?:sudo\s+)?rm\b(?=[^\r\n]*(?:--recursive\b|-[^\s]*r))(?=[^\r\n]*(?:--force\b|-[^\s]*f))'
+  - id: powershell-recursive-force-delete
+    pattern: 'remove-item\b(?=[^\r\n]*-(?:recurse|r)\b)(?=[^\r\n]*-(?:force|fo)\b)'
+  - id: hard-reset
+    pattern: 'git\s+reset\s+--hard\b'
+  - id: destructive-clean
+    pattern: 'git\s+clean\b(?=[^\r\n]*(?:-[^\s]*[dx]|--ignored\b|--directories\b))(?=[^\r\n]*(?:-[^\s]*f|--force\b))'
+  - id: drop-database
+    pattern: 'drop\s+(?:database|schema)\b'
+  - id: terraform-destroy
+    pattern: 'terraform\s+destroy\b'
+  - id: disk-overwrite
+    pattern: '(?:^|\s)dd\s+[^\r\n]*\bof=/dev/'

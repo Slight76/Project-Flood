@@ -3,6 +3,9 @@ param(
     [Parameter(Mandatory = $true, Position = 0)]
     [string]$TargetPath,
 
+    [ValidateSet('full', 'adapter')]
+    [string]$Mode = 'full',
+
     [switch]$Force
 )
 
@@ -14,49 +17,40 @@ if (-not (Test-Path -LiteralPath $TargetPath -PathType Container)) {
 }
 
 $targetRoot = [System.IO.Path]::GetFullPath((Resolve-Path -LiteralPath $TargetPath).Path)
-$sourceFiles = Get-ChildItem -LiteralPath $sourceRoot -File -Recurse -Force
-$entries = foreach ($sourceFile in $sourceFiles) {
-    $relativePath = $sourceFile.FullName.Substring($sourceRoot.Length).TrimStart(
-        [System.IO.Path]::DirectorySeparatorChar,
-        [System.IO.Path]::AltDirectorySeparatorChar
-    )
-    [pscustomobject]@{
-        Source = $sourceFile.FullName
-        Relative = $relativePath
-        Destination = Join-Path $targetRoot $relativePath
-    }
+$python = Get-Command python -ErrorAction SilentlyContinue
+$pythonArgs = @()
+if (-not $python) {
+    $python = Get-Command py -ErrorAction SilentlyContinue
+    $pythonArgs = @('-3')
+}
+if (-not $python) {
+    throw 'Python 3 is required.'
 }
 
-$conflicts = @($entries | Where-Object { Test-Path -LiteralPath $_.Destination })
-if ($conflicts.Count -gt 0 -and -not $Force) {
-    $lines = ($conflicts.Relative | ForEach-Object { "  $_" }) -join [Environment]::NewLine
-    throw "No files were copied because these destinations already exist:`n$lines`nMerge them manually, or rerun with -Force to back them up and replace them."
+& $python.Source @pythonArgs -c 'import sys; raise SystemExit(0 if sys.version_info >= (3, 10) else 1)'
+if ($LASTEXITCODE -ne 0) {
+    throw 'Project Flood requires Python 3.10 or newer.'
 }
 
-$backupRoot = $null
-if ($conflicts.Count -gt 0) {
-    $timestamp = [DateTime]::UtcNow.ToString('yyyyMMdd-HHmmss')
-    $backupRoot = Join-Path $targetRoot ".project-flood-backup\$timestamp"
-
-    foreach ($entry in $conflicts) {
-        $backupDestination = Join-Path $backupRoot $entry.Relative
-        $backupDirectory = Split-Path -Parent $backupDestination
-        New-Item -ItemType Directory -Path $backupDirectory -Force | Out-Null
-        Copy-Item -LiteralPath $entry.Destination -Destination $backupDestination
-    }
+& $python.Source @pythonArgs -c 'import yaml'
+if ($LASTEXITCODE -ne 0) {
+    throw "PyYAML is required. Run: $($python.Source) $($pythonArgs -join ' ') -m pip install -r `"$(Join-Path $PSScriptRoot '..\requirements.txt')`""
 }
 
-foreach ($entry in $entries) {
-    $destinationDirectory = Split-Path -Parent $entry.Destination
-    New-Item -ItemType Directory -Path $destinationDirectory -Force | Out-Null
-    Copy-Item -LiteralPath $entry.Source -Destination $entry.Destination -Force
+$arguments = @(
+    (Join-Path $PSScriptRoot 'flood.py'),
+    'install',
+    '--source', $sourceRoot,
+    '--target', $targetRoot,
+    '--mode', $Mode
+)
+if ($Force) {
+    $arguments += '--force'
 }
 
-$scratchPath = Join-Path $targetRoot '.agent-team\scratch'
-New-Item -ItemType Directory -Path $scratchPath -Force | Out-Null
-
-Write-Host "Project Flood installed into $targetRoot"
-if ($backupRoot) {
-    Write-Host "Replaced files were backed up to $backupRoot"
+& $python.Source @pythonArgs @arguments
+if ($LASTEXITCODE -ne 0) {
+    throw "Project Flood installation failed with exit code $LASTEXITCODE."
 }
-Write-Host 'Next: open the repository in VS Code, select Squad Lead, and run /onboard-repository.'
+
+Write-Host 'Next: open the repository in VS Code, select Flood Squad Lead, and invoke flood-repository-onboarding.'

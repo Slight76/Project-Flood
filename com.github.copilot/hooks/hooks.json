@@ -1,0 +1,84 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "type": "command",
+        "command": "python \"${PLUGIN_ROOT}/scripts/hook.py\"",
+        "windows": "py -3 \"${PLUGIN_ROOT}\\scripts\\hook.py\"",
+        "linux": "python3 \"${PLUGIN_ROOT}/scripts/hook.py\"",
+        "osx": "python3 \"${PLUGIN_ROOT}/scripts/hook.py\"",
+        "timeout": 10
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "type": "command",
+        "command": "python \"${PLUGIN_ROOT}/scripts/hook.py\"",
+        "windows": "py -3 \"${PLUGIN_ROOT}\\scripts\\hook.py\"",
+        "linux": "python3 \"${PLUGIN_ROOT}/scripts/hook.py\"",
+        "osx": "python3 \"${PLUGIN_ROOT}/scripts/hook.py\"",
+        "timeout": 10
+      }
+    ],
+    "PreToolUse": [
+      {
+        "type": "command",
+        "command": "python \"${PLUGIN_ROOT}/scripts/hook.py\"",
+        "windows": "py -3 \"${PLUGIN_ROOT}\\scripts\\hook.py\"",
+        "linux": "python3 \"${PLUGIN_ROOT}/scripts/hook.py\"",
+        "osx": "python3 \"${PLUGIN_ROOT}/scripts/hook.py\"",
+        "timeout": 10
+      }
+    ],
+    "PostToolUse": [
+      {
+        "type": "command",
+        "command": "python \"${PLUGIN_ROOT}/scripts/hook.py\"",
+        "windows": "py -3 \"${PLUGIN_ROOT}\\scripts\\hook.py\"",
+        "linux": "python3 \"${PLUGIN_ROOT}/scripts/hook.py\"",
+        "osx": "python3 \"${PLUGIN_ROOT}/scripts/hook.py\"",
+        "timeout": 10
+      }
+    ],
+    "SubagentStart": [
+      {
+        "type": "command",
+        "command": "python \"${PLUGIN_ROOT}/scripts/hook.py\"",
+        "windows": "py -3 \"${PLUGIN_ROOT}\\scripts\\hook.py\"",
+        "linux": "python3 \"${PLUGIN_ROOT}/scripts/hook.py\"",
+        "osx": "python3 \"${PLUGIN_ROOT}/scripts/hook.py\"",
+        "timeout": 10
+      }
+    ],
+    "SubagentStop": [
+      {
+        "type": "command",
+        "command": "python \"${PLUGIN_ROOT}/scripts/hook.py\"",
+        "windows": "py -3 \"${PLUGIN_ROOT}\\scripts\\hook.py\"",
+        "linux": "python3 \"${PLUGIN_ROOT}/scripts/hook.py\"",
+        "osx": "python3 \"${PLUGIN_ROOT}/scripts/hook.py\"",
+        "timeout": 10
+      }
+    ],
+    "PreCompact": [
+      {
+        "type": "command",
+        "command": "python \"${PLUGIN_ROOT}/scripts/hook.py\"",
+        "windows": "py -3 \"${PLUGIN_ROOT}\\scripts\\hook.py\"",
+        "linux": "python3 \"${PLUGIN_ROOT}/scripts/hook.py\"",
+        "osx": "python3 \"${PLUGIN_ROOT}/scripts/hook.py\"",
+        "timeout": 10
+      }
+    ],
+    "Stop": [
+      {
+        "type": "command",
+        "command": "python \"${PLUGIN_ROOT}/scripts/hook.py\"",
+        "windows": "py -3 \"${PLUGIN_ROOT}\\scripts\\hook.py\"",
+        "linux": "python3 \"${PLUGIN_ROOT}/scripts/hook.py\"",
+        "osx": "python3 \"${PLUGIN_ROOT}/scripts/hook.py\"",
+        "timeout": 10
+      }
+    ]
+  }
+}

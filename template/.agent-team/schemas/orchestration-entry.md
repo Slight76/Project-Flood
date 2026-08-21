@@ -1,19 +1,23 @@
 # Orchestration Summary
 
-Create one entry for significant multi-agent work, not every trivial question.
+Create a canonical Markdown entry only for significant squad or swarm work.
 
 ```markdown
-# ORCH-YYYYMMDD-NNN — Task summary
+---
+id: ORCH-YYYYMMDD-NNN
+type: orchestration
+status: complete | partial | blocked | rejected
+mode: squad | research-swarm | build-swarm | review-swarm
+requested_by: human
+started: ISO-8601
+completed: ISO-8601
+---
 
-- **Requested by:**
-- **Mode:** Squad | Swarm
-- **Started:**
-- **Completed:**
-- **Outcome:** Complete | Partial | Blocked | Rejected
+# Task summary
 
-## Routing
+## Routing and ownership
 
-| Task | Agent | Why chosen | Dependencies | Read scope | Exclusive write scope | Mode |
+| Task | Agent/session | Why | Dependencies | Read scope | Exclusive write scope | Wave |
 | --- | --- | --- | --- | --- | --- | --- |
 
 ## Verification gates
@@ -21,15 +25,7 @@ Create one entry for significant multi-agent work, not every trivial question.
 | Gate | Reviewer | Verdict | Evidence |
 | --- | --- | --- | --- |
 
-## Decisions and memory
-
-- Promoted candidates:
-- Pending candidates:
-- Human decisions required:
-
-## Final risks
-
-- Remaining risk or limitation.
+## Memory and final risk
 ```
 
-Entries are append-only after completion. Correct factual mistakes with a dated amendment instead of silently changing history.
+Completed entries are append-only. Correct mistakes with a dated amendment.
