@@ -16,12 +16,17 @@ class WrapperSmokeTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp_dir:
             target = Path(temp_dir) / "bash-target"
             target.mkdir()
-            subprocess.run(
+            completed = subprocess.run(
                 ["bash", str(REPOSITORY_ROOT / "scripts/install.sh"), str(target)],
-                check=True,
+                check=False,
                 cwd=REPOSITORY_ROOT,
                 capture_output=True,
                 text=True,
+            )
+            self.assertEqual(
+                0,
+                completed.returncode,
+                f"stdout:\n{completed.stdout}\nstderr:\n{completed.stderr}",
             )
             self.assertTrue((target / ".project-flood/install-manifest.yaml").exists())
 
@@ -30,7 +35,7 @@ class WrapperSmokeTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp_dir:
             target = Path(temp_dir) / "powershell-target"
             target.mkdir()
-            subprocess.run(
+            completed = subprocess.run(
                 [
                     "pwsh",
                     "-NoProfile",
@@ -39,10 +44,15 @@ class WrapperSmokeTests(unittest.TestCase):
                     "-TargetPath",
                     str(target),
                 ],
-                check=True,
+                check=False,
                 cwd=REPOSITORY_ROOT,
                 capture_output=True,
                 text=True,
+            )
+            self.assertEqual(
+                0,
+                completed.returncode,
+                f"stdout:\n{completed.stdout}\nstderr:\n{completed.stderr}",
             )
             self.assertTrue((target / ".project-flood/install-manifest.yaml").exists())
 

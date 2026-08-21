@@ -62,16 +62,17 @@ script_dir="$(cd "$(dirname "${script_path}")" && pwd)"
 source_root="$(cd "${script_dir}/../template" && pwd)"
 target_root="$(cd "${target_root}" && pwd)"
 
-if command -v python3 >/dev/null 2>&1; then
-  python_command=(python3)
-elif command -v python >/dev/null 2>&1; then
-  python_command=(python)
-else
-  echo "Python 3 is required." >&2
-  exit 1
-fi
+python_command=()
+for candidate in python3 python; do
+  if command -v "${candidate}" >/dev/null 2>&1 \
+    && "${candidate}" -c "import sys; raise SystemExit(0 if sys.version_info >= (3, 10) else 1)" \
+      >/dev/null 2>&1; then
+    python_command=("${candidate}")
+    break
+  fi
+done
 
-if ! "${python_command[@]}" -c "import sys; raise SystemExit(0 if sys.version_info >= (3, 10) else 1)"; then
+if [[ ${#python_command[@]} -eq 0 ]]; then
   echo "Project Flood requires Python 3.10 or newer." >&2
   exit 1
 fi
